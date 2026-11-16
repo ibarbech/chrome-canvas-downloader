@@ -2,7 +2,11 @@ const list = document.getElementById("list");
 const statusEl = document.getElementById("status");
 const btnAll = document.getElementById("all");
 
+// Texto traducido según el idioma de Chrome (_locales/<idioma>/messages.json).
+const t = (key, subs) => chrome.i18n.getMessage(key, subs) || key;
+
 // Se ejecuta dentro de la página: recoge los canvas y sus datos PNG.
+// Devuelve códigos de error (no texto) para que el popup los traduzca.
 function collectCanvases() {
   return Array.from(document.querySelectorAll("canvas")).map((c, index) => {
     const r = c.getBoundingClientRect();
@@ -11,7 +15,7 @@ function collectCanvases() {
     try {
       url = c.toDataURL("image/png");
     } catch (e) {
-      error = "No se puede exportar (canvas con imágenes de otro dominio o WebGL sin buffer preservado).";
+      error = "export";
     }
     return {
       index,
@@ -37,19 +41,32 @@ function download(url, filename) {
   });
 }
 
+// Muestra un mensaje claro (título y explicación) en lugar de texto técnico.
+function showMessage(title, detail) {
+  list.innerHTML = "";
+  const h = document.createElement("strong");
+  h.textContent = title;
+  const d = document.createElement("p");
+  d.className = "meta";
+  d.textContent = detail;
+  list.append(h, d);
+  btnAll.disabled = true;
+}
+
 function render(items, tabId) {
   list.innerHTML = "";
-  const downloadable = items.filter((c) => c.url);
   if (items.length === 0) {
-    list.textContent = "No hay ningún canvas en esta página.";
+    showMessage(t("noCanvasTitle"), t("noCanvasDetail"));
     return;
   }
+  const downloadable = items.filter((c) => c.url);
+
   for (const c of items) {
     const box = document.createElement("div");
     box.className = "canvas";
     const meta = document.createElement("div");
     meta.className = "meta";
-    meta.textContent = `Canvas ${c.index}: ${c.width}x${c.height} px (en pantalla ${c.shown})`;
+    meta.textContent = t("canvasInfo", [String(c.index), String(c.width), String(c.height), c.shown]);
     box.appendChild(meta);
 
     if (c.url) {
@@ -58,20 +75,20 @@ function render(items, tabId) {
       img.alt = `Canvas ${c.index}`;
       box.appendChild(img);
       const btn = document.createElement("button");
-      btn.textContent = "Descargar PNG";
+      btn.textContent = t("downloadOne");
       btn.addEventListener("click", async () => {
         try {
           await download(c.url, `canvas_${tabId}_${c.index}.png`);
-          setStatus(`Descargado canvas ${c.index}.`);
+          setStatus(t("downloadedOne", [String(c.index)]));
         } catch (e) {
-          setStatus(`Error: ${e.message}`);
+          setStatus(t("downloadError", [e.message]));
         }
       });
       box.appendChild(btn);
     } else {
       const err = document.createElement("div");
       err.className = "meta";
-      err.textContent = c.error;
+      err.textContent = t("exportError");
       box.appendChild(err);
     }
     list.appendChild(box);
@@ -85,17 +102,34 @@ function render(items, tabId) {
         await download(c.url, `canvas_${tabId}_${c.index}.png`);
         ok++;
       } catch (e) {
-        setStatus(`Error en canvas ${c.index}: ${e.message}`);
+        setStatus(t("downloadErrorCanvas", [String(c.index), e.message]));
       }
     }
-    setStatus(`Descargados ${ok} de ${downloadable.length} canvas.`);
+    setStatus(t("downloadedAll", [String(ok), String(downloadable.length)]));
   };
 }
 
+// Páginas internas o protegidas de Chrome: las extensiones no pueden leerlas.
+const RESTRICTED = /^(chrome|chrome-extension|edge|about|devtools|view-source|chrome-search|https:\/\/chrome\.google\.com\/webstore)/i;
+
 async function main() {
+  // Rellena los textos fijos de la página con el idioma de Chrome.
+  document.querySelectorAll("[data-i18n]").forEach((el) => {
+    el.textContent = t(el.dataset.i18n);
+  });
+
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
   if (!tab || !tab.id) {
-    list.textContent = "No se encuentra la pestaña activa.";
+    showMessage(t("noActiveTab"), t("noActiveTabDetail"));
+    return;
+  }
+  const url = tab.url || "";
+  if (RESTRICTED.test(url)) {
+    showMessage(t("restrictedTitle"), t("restrictedDetail"));
+    return;
+  }
+  if (url.startsWith("file:")) {
+    showMessage(t("fileTitle"), t("fileDetail"));
     return;
   }
   try {
@@ -105,7 +139,7 @@ async function main() {
     });
     render(injection.result, tab.id);
   } catch (e) {
-    list.textContent = `No se puede leer esta página: ${e.message}`;
+    showMessage(t("readErrorTitle"), t("readErrorDetail"));
   }
 }
 

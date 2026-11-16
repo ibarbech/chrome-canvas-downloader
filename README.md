@@ -2,6 +2,10 @@
 
 A Chrome extension that lists the `<canvas>` elements of the current tab and saves them as PNG files.
 
+## Languages
+
+The interface is available in Spanish and English. Chrome picks the language from your browser settings; Spanish is used for any other language.
+
 ## Install
 
 1. Go to the [Releases page](https://github.com/ibarbech/chrome-canvas-downloader/releases/latest) and download the `chrome-canvas-downloader-<version>.zip` file.
@@ -66,6 +70,8 @@ node scripts/package.mjs 1.0.0
 
 ```
 manifest.json   Extension manifest (Manifest V3)
+_locales/       Translations (es, en)
+icons/          Extension icons (16, 32, 48, 128 px)
 popup.html      Popup layout and styles
 popup.js        Finds the canvases, renders the list and starts the downloads
 scripts/        Release helpers: set the manifest version and build the zip
