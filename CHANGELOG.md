@@ -1,3 +1,10 @@
+## [1.1.2](https://github.com/ibarbech/chrome-canvas-downloader/compare/v1.1.1...v1.1.2) (2026-11-16)
+
+
+### Bug Fixes
+
+* include icons and translations in the release zip ([9103199](https://github.com/ibarbech/chrome-canvas-downloader/commit/9103199631158f38bcd71c55fe60f514bd8de61a))
+
 ## [1.1.1](https://github.com/ibarbech/chrome-canvas-downloader/compare/v1.1.0...v1.1.1) (2026-11-16)
 
 
