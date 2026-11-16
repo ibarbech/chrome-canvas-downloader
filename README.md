@@ -9,7 +9,7 @@ The interface is available in Spanish and English. Chrome picks the language fro
 ## Install
 
 1. Go to the [Releases page](https://github.com/ibarbech/chrome-canvas-downloader/releases/latest) and download the `chrome-canvas-downloader-<version>.zip` file.
-2. Unzip it. You get a folder with `manifest.json`, `popup.html` and `popup.js`.
+2. Unzip it. You get a folder with `manifest.json`, `popup.html`, `popup.js`, `icons/` and `_locales/`. Keep the whole folder; Chrome needs all of it.
 3. Open `chrome://extensions` in Chrome.
 4. Turn on **Developer mode** (top right).
 5. Click **Load unpacked** and select the unzipped folder.
