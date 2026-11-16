@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <style>
+    body { font-family: system-ui, sans-serif; width: 340px; margin: 0; padding: 12px; }
+    h1 { font-size: 16px; margin: 0 0 8px; }
+    .canvas { border: 1px solid #ddd; border-radius: 6px; padding: 8px; margin-bottom: 8px; }
+    .canvas img { max-width: 100%; display: block; margin-bottom: 6px; background: repeating-conic-gradient(#eee 0 25%, #fff 0 50%) 0 0 / 16px 16px; }
+    .meta { font-size: 12px; color: #555; margin-bottom: 6px; }
+    button { cursor: pointer; padding: 4px 10px; }
+    button:disabled { cursor: not-allowed; opacity: .5; }
+    #status { font-size: 12px; color: #333; min-height: 16px; margin-top: 6px; }
+  </style>
+</head>
+<body>
+  <h1>Canvas de esta página</h1>
+  <div id="list">Buscando canvas…</div>
+  <button id="all" disabled>Descargar todos</button>
+  <div id="status"></div>
+  <script src="popup.js"></script>
+</body>
+</html>
