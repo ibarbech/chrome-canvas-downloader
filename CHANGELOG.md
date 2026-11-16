@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/ibarbech/chrome-canvas-downloader/compare/v1.1.0...v1.1.1) (2026-11-16)
+
+
+### Bug Fixes
+
+* attach the extension zip to GitHub releases ([d9cd747](https://github.com/ibarbech/chrome-canvas-downloader/commit/d9cd7470c96575aad9112e0724ccfdf7cce5c686))
+
 # [1.1.0](https://github.com/ibarbech/chrome-canvas-downloader/compare/v1.0.0...v1.1.0) (2026-11-16)
 
 
