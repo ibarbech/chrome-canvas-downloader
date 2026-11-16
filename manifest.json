@@ -1,11 +1,15 @@
 {
   "manifest_version": 3,
   "name": "Descargar canvas",
-  "version": "1.0",
+  "version": "1.0.0",
   "description": "Lista los canvas de la página actual y los descarga como PNG.",
   "action": {
     "default_popup": "popup.html",
     "default_title": "Descargar canvas"
   },
-  "permissions": ["activeTab", "scripting", "downloads"]
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "downloads"
+  ]
 }
